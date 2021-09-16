@@ -51,7 +51,7 @@ class ArxivQueryPostOut(BaseModel):
 
         message (str): メッセージ
     """
-    message: str = Field(..., title='message')
+    message: str = Field('検索クエリの登録が完了しました', title='message')
 
     class Config:
         schema_extra = {
@@ -68,7 +68,7 @@ class ArxivQueryPutOut(BaseModel):
 
         message (str): メッセージ
     """
-    message: str = Field(..., title='message')
+    message: str = Field('検索クエリの更新が完了しました', title='message')
 
     class Config:
         schema_extra = {
@@ -85,7 +85,7 @@ class ArxivQueryDeleteOut(BaseModel):
 
         message (str): メッセージ
     """
-    message: str = Field(..., title='message')
+    message: str = Field('検索クエリの削除が完了しました', title='message')
 
     class Config:
         schema_extra = {
