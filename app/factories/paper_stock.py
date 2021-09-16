@@ -3,16 +3,16 @@ from factory.declarations import SubFactory
 from sqlalchemy import func
 
 from app.factories import PaperFactory
-from app.models import FavoriteModel, session
+from app.models import PaperStockModel, session
 
 
-class FavoriteFactory(SQLAlchemyModelFactory):
+class PaperStockFactory(SQLAlchemyModelFactory):
     class Meta:
 
-        model = FavoriteModel
+        model = PaperStockModel
         sqlalchemy_session = session
 
     is_checked = False
-    paper = SubFactory(PaperFactory)
+    paper_model = SubFactory(PaperFactory)
     created_at = func.now()
     updated_at = func.now()

@@ -4,7 +4,7 @@ from factory.alchemy import SQLAlchemyModelFactory
 from factory.declarations import SubFactory
 from sqlalchemy import func
 
-from app.factories import QueryFactory
+from app.factories import ArxivQueryFactory
 from app.models import PaperModel, session
 
 
@@ -16,7 +16,8 @@ class PaperFactory(SQLAlchemyModelFactory):
 
     title = Sequence(lambda n: f'title_{n}')
     abstract = Faker('text')
-    link = Faker('url')
-    query = SubFactory(QueryFactory)
+    abstract_jp = ""
+    pdf_link = Faker('url')
+    arxiv_query_model = SubFactory(ArxivQueryFactory)
     created_at = func.now()
     updated_at = func.now()

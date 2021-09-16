@@ -8,35 +8,35 @@ from sqlalchemy.schema import ForeignKey
 from app.models import BaseModel, PaperModel
 
 
-class FavoriteModel(BaseModel):
+class PaperStockModel(BaseModel):
     """
-    FavoriteModel
+    PaperStockModel
     """
-    __tablename__ = 'favorites'
+    __tablename__ = 'paper_stocks'
 
-    id: int = Column(Integer, primary_key=True)
+    paper_stock_id: int = Column(Integer, primary_key=True)
     is_checked: bool = Column(Boolean, nullable=False, default=False)
-    paper_id: int = Column(Integer, ForeignKey(PaperModel.id), nullable=False)
-    paper: PaperModel = relationship(PaperModel)
+    paper_id: int = Column(Integer, ForeignKey(PaperModel.paper_id), nullable=False)
+    paper_model: PaperModel = relationship(PaperModel)
 
     def __init__(self,
                  is_checked: bool,
                  paper_id: Optional[int]=None,
-                 paper: Optional[PaperModel] = None,
+                 paper_model: Optional[PaperModel] = None,
                  created_at: Optional[datetime] = None,
                  updated_at: Optional[datetime] = None) -> None:
 
         if paper_id is not None:
             self.paper_id = paper_id
-        if paper is not None:
-            self.paper = paper
+        if paper_model is not None:
+            self.paper_model = paper_model
         self.is_checked = is_checked
         self.created_at = created_at
         self.updated_at = updated_at
 
     def __repr__(self) -> str:
-        return "<FavoriteModel('%s', '%s', '%s','%s','%s')>" %\
-            (self.id,
+        return "<PaperStockModel('%s', '%s', '%s','%s','%s')>" %\
+            (self.paper_stock_id,
              self.paper_id,
              self.is_checked,
              self.created_at,

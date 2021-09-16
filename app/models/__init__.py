@@ -1,4 +1,4 @@
 from app.models.setting import BaseModel, Engine, session
-from app.models.query import QueryModel
+from app.models.arxiv_query import ArxivQueryModel
 from app.models.paper import PaperModel
-from app.models.favorite import FavoriteModel
+from app.models.paper_stock import PaperStockModel
