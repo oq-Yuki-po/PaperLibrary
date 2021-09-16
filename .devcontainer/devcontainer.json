@@ -71,7 +71,7 @@
 			"files.trimTrailingWhitespace": false,
 			"editor.renderWhitespace": "boundary"
 		},
-		"autoDocstring.docstringFormat": "numpy",
+		"autoDocstring.docstringFormat": "google",
 		"python.testing.pytestArgs": [
 			"test"
 		],
