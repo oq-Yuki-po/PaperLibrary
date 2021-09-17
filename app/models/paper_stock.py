@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import Boolean, Column, Integer
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import backref, relationship
 from sqlalchemy.schema import ForeignKey
 
 from app.models import BaseModel, PaperModel
@@ -16,12 +16,12 @@ class PaperStockModel(BaseModel):
 
     paper_stock_id: int = Column(Integer, primary_key=True)
     is_checked: bool = Column(Boolean, nullable=False, default=False)
-    paper_id: int = Column(Integer, ForeignKey(PaperModel.paper_id), nullable=False)
-    paper_model: PaperModel = relationship(PaperModel)
+    paper_id: int = Column(Integer, ForeignKey(PaperModel.paper_id, ondelete='CASCADE'), nullable=False)
+    paper_model: PaperModel = relationship(PaperModel, backref=backref('paper_stocks', passive_deletes=True))
 
     def __init__(self,
                  is_checked: bool,
-                 paper_id: Optional[int]=None,
+                 paper_id: Optional[int] = None,
                  paper_model: Optional[PaperModel] = None,
                  created_at: Optional[datetime] = None,
                  updated_at: Optional[datetime] = None) -> None:

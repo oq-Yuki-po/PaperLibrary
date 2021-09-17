@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import TEXT, Column, Integer
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import backref, relationship
 from sqlalchemy.schema import ForeignKey
 
 from app.models import ArxivQueryModel, BaseModel
@@ -19,8 +19,10 @@ class PaperModel(BaseModel):
     abstract: str = Column(TEXT, nullable=False)
     abstract_jp: str = Column(TEXT, nullable=False)
     pdf_link: str = Column(TEXT, nullable=False)
-    arxiv_query_id: int = Column(Integer, ForeignKey(ArxivQueryModel.arxiv_query_id), nullable=False)
-    arxiv_query_model: ArxivQueryModel = relationship(ArxivQueryModel)
+    arxiv_query_id: int = Column(Integer,
+                                 ForeignKey(ArxivQueryModel.arxiv_query_id, ondelete='CASCADE'),
+                                 nullable=False)
+    arxiv_query_model: ArxivQueryModel = relationship(ArxivQueryModel, backref=backref('papers', passive_deletes=True))
 
     def __init__(self,
                  title: str,
