@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.requests.paper import PapersGetIn
-from app.responses.paper import PapersGetOut
+from app.request.paper import PapersGetIn
+from app.response.paper import PapersGetOut
 
 router = APIRouter()
 

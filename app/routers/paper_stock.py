@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.responses.paper_stock import PaperStockDeleteOut, PaperStockPostOut, PaperStockPutOut
+from app.response.paper_stock import PaperStockDeleteOut, PaperStockPostOut, PaperStockPutOut
 
 router = APIRouter()
 

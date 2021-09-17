@@ -13,7 +13,9 @@ class PapersGetIn(BaseModel):
 
         arxiv_query_id (int): ArxivクエリID
 
-        is_stocked (bool): ストック判定フラグ
+        is_stocked (bool): ストックのみを表示するか判定するフラグ
+
+        is_checked (bool): is_stocked=Trueの時にチェック済みの論文を表示するか判定するフラグ
 
         page (int): ページネーションに使用する表示したいページ数
 
@@ -22,6 +24,7 @@ class PapersGetIn(BaseModel):
     created_at: Optional[str] = Field(datetime.now().strftime("%Y/%m/%d"))
     arxiv_query_id: Optional[int]
     is_stocked: Optional[bool] = Field(False)
+    is_checked: Optional[bool] = Field(False)
     page: int = Field(1)
 
     class Config:

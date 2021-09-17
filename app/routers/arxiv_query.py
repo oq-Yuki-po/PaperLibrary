@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.requests.arxiv_query import ArxivQueryDeleteIn, ArxivQueryPostIn, ArxivQueryPutIn
-from app.responses.arxiv_query import ArxivQueryDeleteOut, ArxivQueryGetOut, ArxivQueryPostOut, ArxivQueryPutOut
+from app.request.arxiv_query import ArxivQueryDeleteIn, ArxivQueryPostIn, ArxivQueryPutIn
+from app.response.arxiv_query import ArxivQueryDeleteOut, ArxivQueryGetOut, ArxivQueryPostOut, ArxivQueryPutOut
 
 router = APIRouter()
 
