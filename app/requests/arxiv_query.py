@@ -15,7 +15,7 @@ class ArxivQueryPostIn(BaseModel):
     class Config:
         schema_extra = {
             'example': {
-                'arxiv_quey': 'OCR'
+                'arxiv_query': 'OCR'
             }
         }
 
