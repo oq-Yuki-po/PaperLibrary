@@ -72,4 +72,14 @@ async def update_arxiv_query_is_active(params: ArxivQueryPutIn):
 
 @ router.delete("/", summary="論文の検索クエリを削除する", response_model=ArxivQueryDeleteOut)
 async def delete_arxiv_query(params: ArxivQueryDeleteIn):
-    pass
+    try:
+        session.query(ArxivQueryModel).filter(ArxivQueryModel.arxiv_query_id == params.arxiv_query_id).delete()
+
+        session.commit()
+
+        return ArxivQueryDeleteOut()
+    except SQLAlchemyError as e:
+        session.rollback()
+
+    except Exception as e:
+        session.rollback()

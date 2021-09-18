@@ -1,8 +1,8 @@
 import pytest
 from fastapi import status
 
-from app.factories import ArxivQueryFactory
-from app.models import ArxivQueryModel, session
+from app.factories import ArxivQueryFactory, PaperFactory, PaperStockFactory
+from app.models import ArxivQueryModel, PaperModel, PaperStockModel
 
 
 class TestArxivQueryPost():
@@ -77,3 +77,41 @@ class TestArxivQueryPut():
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
         assert response.json() == {"message": "更新対象が存在しませんでした"}
+
+class TestArxivQueryDelete():
+    def test_delete_arxiv_query(self, app_client, db_session):
+
+        arxiv_query = ArxivQueryFactory()
+        papers = PaperFactory.build_batch(5, arxiv_query_model=arxiv_query)
+
+        paper_stock_1 = PaperStockFactory(paper_model=papers[0])
+        paper_stock_2 = PaperStockFactory(paper_model=papers[1])
+        paper_stock_3 = PaperStockFactory(paper_model=papers[2])
+
+        db_session.add_all(papers)
+        db_session.add(paper_stock_1)
+        db_session.add(paper_stock_2)
+        db_session.add(paper_stock_3)
+        db_session.commit()
+
+        saved_arxiv_queries = db_session.query(ArxivQueryModel).all()
+        saved_papers = db_session.query(PaperModel).all()
+        saved_paper_stocks = db_session.query(PaperStockModel).all()
+
+        assert len(saved_arxiv_queries) == 1
+        assert len(saved_papers) == 5
+        assert len(saved_paper_stocks) == 3
+
+        id = saved_arxiv_queries[0].arxiv_query_id
+        response = app_client.delete("/arxiv_query/", json={"arxiv_query_id": id})
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() == {"message": "検索クエリの削除が完了しました"}
+
+        saved_arxiv_queries = db_session.query(ArxivQueryModel).all()
+        saved_papers = db_session.query(PaperModel).all()
+        saved_paper_stocks = db_session.query(PaperStockModel).all()
+
+        assert len(saved_arxiv_queries) == 0
+        assert len(saved_papers) == 0
+        assert len(saved_paper_stocks) == 0
