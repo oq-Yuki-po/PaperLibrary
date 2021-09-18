@@ -77,6 +77,22 @@ class ArxivQueryPostConflict(BaseModel):
         }
 
 
+class ArxivQueryPutNone(BaseModel):
+    """/arxiv_query put レスポンスクラス
+
+    Attributes:
+
+        message (str): メッセージ
+    """
+    message: str = Field('更新対象が存在しませんでした', title='message')
+
+    class Config:
+        schema_extra = {
+            'example': {
+                'message': '更新対象が存在しませんでした'
+            }
+        }
+
 class ArxivQueryPutOut(BaseModel):
     """/arxiv_query put レスポンスクラス
 
@@ -92,7 +108,6 @@ class ArxivQueryPutOut(BaseModel):
                 'message': '検索クエリの更新が完了しました'
             }
         }
-
 
 class ArxivQueryDeleteOut(BaseModel):
     """/arxiv_query delete レスポンスクラス

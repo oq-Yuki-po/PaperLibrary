@@ -10,7 +10,8 @@ class ArxivQueryPostIn(BaseModel):
     """
 
     arxiv_query: str = Field(...,
-                             min_length=1)
+                             min_length=1,
+                             max_length=255)
 
     class Config:
         schema_extra = {
