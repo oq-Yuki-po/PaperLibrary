@@ -18,7 +18,7 @@ class ArxivQueryModel(BaseModel):
 
     def __init__(self,
                  arxiv_query: str,
-                 is_active: bool,
+                 is_active: bool = True,
                  created_at: Optional[datetime] = None,
                  updated_at: Optional[datetime] = None) -> None:
         self.arxiv_query = arxiv_query

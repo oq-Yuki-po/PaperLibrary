@@ -60,6 +60,22 @@ class ArxivQueryPostOut(BaseModel):
             }
         }
 
+class ArxivQueryPostConflict(BaseModel):
+    """/arxiv_query post Conflictレスポンスクラス
+
+    Attributes:
+
+        message (str): メッセージ
+    """
+    message: str = Field('既に登録されています', title='message')
+
+    class Config:
+        schema_extra = {
+            'example': {
+                'message': '既に登録されています'
+            }
+        }
+
 
 class ArxivQueryPutOut(BaseModel):
     """/arxiv_query put レスポンスクラス
