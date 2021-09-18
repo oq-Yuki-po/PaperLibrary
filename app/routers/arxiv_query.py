@@ -1,7 +1,12 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
+from fastapi.responses import JSONResponse
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.sql import exists
 
+from app.models import ArxivQueryModel, session
 from app.request.arxiv_query import ArxivQueryDeleteIn, ArxivQueryPostIn, ArxivQueryPutIn
-from app.response.arxiv_query import ArxivQueryDeleteOut, ArxivQueryGetOut, ArxivQueryPostOut, ArxivQueryPutOut
+from app.response.arxiv_query import (ArxivQueryDeleteOut, ArxivQueryGetOut, ArxivQueryPostConflict, ArxivQueryPostOut,
+                                      ArxivQueryPutOut)
 
 router = APIRouter()
 
@@ -15,9 +20,30 @@ async def fetch_all_arxiv_queries():
     pass
 
 
-@router.post("/", summary="論文の検索クエリを登録", response_model=ArxivQueryPostOut)
+@router.post("/",
+             summary="論文の検索クエリを登録",
+             response_model=ArxivQueryPostOut,
+             responses={status.HTTP_409_CONFLICT: {'description': '登録しようとしたArxivクエリが存在する場合',
+                                                   'model':ArxivQueryPostConflict}})
 async def save_arxiv_query(params: ArxivQueryPostIn):
-    pass
+
+    try:
+        # 重複チェック
+        if session.query(exists().where(ArxivQueryModel.arxiv_query == params.arxiv_query)).scalar():
+
+            return JSONResponse(status_code=409, content={"message": "既に登録されています"})
+        else:
+            # 登録処理
+            arxiv_query_model = ArxivQueryModel(arxiv_query=params.arxiv_query)
+            session.add(arxiv_query_model)
+            session.commit()
+        return ArxivQueryPostOut()
+
+    except SQLAlchemyError as e:
+        session.rollback()
+
+    except Exception as e:
+        session.rollback()
 
 
 @router.put("/", summary="論文検索時に使用するクエリの状態を更新", response_model=ArxivQueryPutOut)
