@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.sql import exists
 
-from app.factories import arxiv_query
+from app import app_logger
 from app.models import ArxivQueryModel, session
 from app.request.arxiv_query import ArxivQueryDeleteIn, ArxivQueryPostIn, ArxivQueryPutIn
 from app.response.arxiv_query import (ArxivQuery, ArxivQueryDeleteOut, ArxivQueryGetOut, ArxivQueryPostConflict,
@@ -30,9 +30,15 @@ async def fetch_all_arxiv_queries():
 
     except SQLAlchemyError as e:
         session.rollback()
+        app_logger.error(e)
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"message": "サーバー内で予期しないエラーが発生"})
 
     except Exception as e:
         session.rollback()
+        app_logger.error(e)
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"message": "サーバー内で予期しないエラーが発生"})
 
 
 @router.post("/",
@@ -46,7 +52,7 @@ async def save_arxiv_query(params: ArxivQueryPostIn):
         # 重複チェック
         if session.query(exists().where(ArxivQueryModel.arxiv_query == params.arxiv_query)).scalar():
 
-            return JSONResponse(status_code=409, content={"message": "既に登録されています"})
+            return JSONResponse(status_code=status.HTTP_409_CONFLICT, content={"message": "既に登録されています"})
         else:
             # 登録処理
             arxiv_query_model = ArxivQueryModel(arxiv_query=params.arxiv_query)
@@ -56,9 +62,15 @@ async def save_arxiv_query(params: ArxivQueryPostIn):
 
     except SQLAlchemyError as e:
         session.rollback()
+        app_logger.error(e)
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"message": "サーバー内で予期しないエラーが発生"})
 
     except Exception as e:
         session.rollback()
+        app_logger.error(e)
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"message": "サーバー内で予期しないエラーが発生"})
 
 
 @router.put("/",
@@ -78,11 +90,18 @@ async def update_arxiv_query_is_active(params: ArxivQueryPutIn):
             record.is_active = not record.is_active
             session.commit()
         return ArxivQueryPutOut()
+
     except SQLAlchemyError as e:
         session.rollback()
+        app_logger.error(e)
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"message": "サーバー内で予期しないエラーが発生"})
 
     except Exception as e:
         session.rollback()
+        app_logger.error(e)
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"message": "サーバー内で予期しないエラーが発生"})
 
 
 @ router.delete("/", summary="論文の検索クエリを削除する", response_model=ArxivQueryDeleteOut)
@@ -95,6 +114,12 @@ async def delete_arxiv_query(params: ArxivQueryDeleteIn):
         return ArxivQueryDeleteOut()
     except SQLAlchemyError as e:
         session.rollback()
+        app_logger.error(e)
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"message": "サーバー内で予期しないエラーが発生"})
 
     except Exception as e:
         session.rollback()
+        app_logger.error(e)
+        return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content={"message": "サーバー内で予期しないエラーが発生"})
