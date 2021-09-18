@@ -3,10 +3,11 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.sql import exists
 
+from app.factories import arxiv_query
 from app.models import ArxivQueryModel, session
 from app.request.arxiv_query import ArxivQueryDeleteIn, ArxivQueryPostIn, ArxivQueryPutIn
-from app.response.arxiv_query import (ArxivQueryDeleteOut, ArxivQueryGetOut, ArxivQueryPostConflict, ArxivQueryPostOut,
-                                      ArxivQueryPutNone, ArxivQueryPutOut)
+from app.response.arxiv_query import (ArxivQuery, ArxivQueryDeleteOut, ArxivQueryGetOut, ArxivQueryPostConflict,
+                                      ArxivQueryPostOut, ArxivQueryPutNone, ArxivQueryPutOut)
 
 router = APIRouter()
 
@@ -17,7 +18,21 @@ router = APIRouter(prefix="/arxiv_query",
 
 @router.get("/", summary="登録済みの検索クエリ一覧を取得", response_model=ArxivQueryGetOut)
 async def fetch_all_arxiv_queries():
-    pass
+    try:
+
+        arxiv_queries = session.query(ArxivQueryModel.arxiv_query_id,
+                                      ArxivQueryModel.arxiv_query,
+                                      ArxivQueryModel.is_active).all()
+
+        return ArxivQueryGetOut(arxiv_queries=[ArxivQuery(arxiv_query_id=i.arxiv_query_id,
+                                                          arxiv_query=i.arxiv_query,
+                                                          is_active=i.is_active) for i in arxiv_queries])
+
+    except SQLAlchemyError as e:
+        session.rollback()
+
+    except Exception as e:
+        session.rollback()
 
 
 @router.post("/",

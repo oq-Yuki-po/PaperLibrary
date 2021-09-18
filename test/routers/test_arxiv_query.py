@@ -1,8 +1,11 @@
+import json
+
 import pytest
 from fastapi import status
 
 from app.factories import ArxivQueryFactory, PaperFactory, PaperStockFactory
 from app.models import ArxivQueryModel, PaperModel, PaperStockModel
+from app.response.arxiv_query import ArxivQuery, ArxivQueryGetOut
 
 
 class TestArxivQueryPost():
@@ -78,6 +81,7 @@ class TestArxivQueryPut():
         assert response.status_code == status.HTTP_404_NOT_FOUND
         assert response.json() == {"message": "更新対象が存在しませんでした"}
 
+
 class TestArxivQueryDelete():
     def test_delete_arxiv_query(self, app_client, db_session):
 
@@ -115,3 +119,31 @@ class TestArxivQueryDelete():
         assert len(saved_arxiv_queries) == 0
         assert len(saved_papers) == 0
         assert len(saved_paper_stocks) == 0
+
+
+class TestArxivQueryGet():
+
+    def test_fetch_all_arxiv_queries(self, app_client, db_session):
+
+        target_query_1 = "OCR"
+        target_query_2 = "Text Detection"
+
+        arxiv_query_1 = ArxivQueryFactory(arxiv_query=target_query_1)
+        arxiv_query_2 = ArxivQueryFactory(arxiv_query=target_query_2)
+
+        db_session.add_all([arxiv_query_1, arxiv_query_2])
+        db_session.commit()
+
+        expected_arxiv_query_1 = ArxivQuery(arxiv_query_id=arxiv_query_1.arxiv_query_id,
+                                            arxiv_query=arxiv_query_1.arxiv_query,
+                                            is_active=arxiv_query_1.is_active)
+
+        expected_arxiv_query_2 = ArxivQuery(arxiv_query_id=arxiv_query_2.arxiv_query_id,
+                                            arxiv_query=arxiv_query_2.arxiv_query,
+                                            is_active=arxiv_query_2.is_active)
+        expected_arxiv_query = ArxivQueryGetOut(arxiv_queries=[expected_arxiv_query_1, expected_arxiv_query_2])
+
+        response = app_client.get("/arxiv_query/")
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() == json.loads(expected_arxiv_query.json())
