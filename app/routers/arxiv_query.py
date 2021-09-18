@@ -6,7 +6,7 @@ from sqlalchemy.sql import exists
 from app.models import ArxivQueryModel, session
 from app.request.arxiv_query import ArxivQueryDeleteIn, ArxivQueryPostIn, ArxivQueryPutIn
 from app.response.arxiv_query import (ArxivQueryDeleteOut, ArxivQueryGetOut, ArxivQueryPostConflict, ArxivQueryPostOut,
-                                      ArxivQueryPutOut)
+                                      ArxivQueryPutNone, ArxivQueryPutOut)
 
 router = APIRouter()
 
@@ -24,7 +24,7 @@ async def fetch_all_arxiv_queries():
              summary="論文の検索クエリを登録",
              response_model=ArxivQueryPostOut,
              responses={status.HTTP_409_CONFLICT: {'description': '登録しようとしたArxivクエリが存在する場合',
-                                                   'model':ArxivQueryPostConflict}})
+                                                   'model': ArxivQueryPostConflict}})
 async def save_arxiv_query(params: ArxivQueryPostIn):
 
     try:
@@ -46,11 +46,30 @@ async def save_arxiv_query(params: ArxivQueryPostIn):
         session.rollback()
 
 
-@router.put("/", summary="論文検索時に使用するクエリの状態を更新", response_model=ArxivQueryPutOut)
+@router.put("/",
+            summary="論文検索時に使用するクエリの状態を更新",
+            response_model=ArxivQueryPutOut,
+            responses={status.HTTP_404_NOT_FOUND: {'description': '更新しようとしたidのレコードが存在しない場合',
+                                                   'model': ArxivQueryPutNone}})
 async def update_arxiv_query_is_active(params: ArxivQueryPutIn):
-    pass
+
+    try:
+        record = session.query(ArxivQueryModel).filter(ArxivQueryModel.arxiv_query_id == params.arxiv_query_id).first()
+
+        if record is None:
+            return JSONResponse(status_code=404, content={"message": "更新対象が存在しませんでした"})
+
+        else:
+            record.is_active = not record.is_active
+            session.commit()
+        return ArxivQueryPutOut()
+    except SQLAlchemyError as e:
+        session.rollback()
+
+    except Exception as e:
+        session.rollback()
 
 
-@router.delete("/", summary="論文の検索クエリを削除する", response_model=ArxivQueryDeleteOut)
+@ router.delete("/", summary="論文の検索クエリを削除する", response_model=ArxivQueryDeleteOut)
 async def delete_arxiv_query(params: ArxivQueryDeleteIn):
     pass
