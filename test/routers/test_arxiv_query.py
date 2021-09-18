@@ -147,3 +147,12 @@ class TestArxivQueryGet():
 
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == json.loads(expected_arxiv_query.json())
+
+    def test_fetch_all_arxiv_queries_none(self, app_client, db_session):
+
+        expected_arxiv_query = ArxivQueryGetOut(arxiv_queries=[])
+
+        response = app_client.get("/arxiv_query/")
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() == json.loads(expected_arxiv_query.json())
