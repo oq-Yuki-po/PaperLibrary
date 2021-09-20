@@ -19,7 +19,7 @@ async def fetch_all_arxiv_queries():
 
     arxiv_queries = session.query(ArxivQueryModel.arxiv_query_id,
                                   ArxivQueryModel.arxiv_query,
-                                  ArxivQueryModel.is_active).all()
+                                  ArxivQueryModel.is_active).order_by(ArxivQueryModel.arxiv_query_id).all()
 
     return ArxivQueryGetOut(arxiv_queries=[ArxivQuery(arxiv_query_id=i.arxiv_query_id,
                                                       arxiv_query=i.arxiv_query,
@@ -42,7 +42,9 @@ async def save_arxiv_query(params: ArxivQueryPostIn):
         arxiv_query_model = ArxivQueryModel(arxiv_query=params.arxiv_query)
         session.add(arxiv_query_model)
         session.commit()
-    return ArxivQueryPostOut()
+    return ArxivQueryPostOut(saved_query=ArxivQuery(arxiv_query_id=arxiv_query_model.arxiv_query_id,
+                                                    arxiv_query=arxiv_query_model.arxiv_query,
+                                                    is_active=arxiv_query_model.is_active))
 
 
 @router.put("/",

@@ -52,11 +52,12 @@ class ArxivQueryPostOut(BaseModel):
         message (str): メッセージ
     """
     message: str = Field('検索クエリの登録が完了しました', title='message')
-
+    saved_query: ArxivQuery
     class Config:
         schema_extra = {
             'example': {
-                'message': '検索クエリの登録が完了しました'
+                'message': '検索クエリの登録が完了しました',
+                'saved_query': {'arxiv_query_id': 1, 'arxiv_query': 'OCR', 'is_active': True}
             }
         }
 

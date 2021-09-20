@@ -33,6 +33,7 @@ class PapersGetIn(BaseModel):
                 'created_at': '2021/09/24',
                 'arxiv_query_id': 2,
                 'is_stocked': True,
+                'is_checked': False,
                 'page': 2
             }
         }

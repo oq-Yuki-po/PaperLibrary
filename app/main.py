@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -18,7 +19,8 @@ initialize_db()
 
 origins = [
     "https://localhost",
-    "http://localhost"
+    "http://localhost",
+    "http://localhost:3000"
 ]
 
 app.add_middleware(
@@ -45,3 +47,6 @@ async def add_request_middleware(request: Request, call_next):
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             content={"message": "サーバー内で予期しないエラーが発生"})
     return response
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
