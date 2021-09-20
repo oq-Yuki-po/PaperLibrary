@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import TEXT, Column, Integer
+from sqlalchemy import TEXT, Column, Integer, String
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.schema import ForeignKey
 
@@ -19,6 +19,7 @@ class PaperModel(BaseModel):
     abstract: str = Column(TEXT, nullable=False)
     abstract_jp: str = Column(TEXT, nullable=False)
     pdf_link: str = Column(TEXT, nullable=False)
+    published_at: str = Column(String(10), nullable=False)
     arxiv_query_id: int = Column(Integer,
                                  ForeignKey(ArxivQueryModel.arxiv_query_id, ondelete='CASCADE'),
                                  nullable=False)
@@ -29,7 +30,8 @@ class PaperModel(BaseModel):
                  abstract: str,
                  abstract_jp: str,
                  pdf_link: str,
-                 arxiv_quey_id: Optional[int] = None,
+                 published_at: str,
+                 arxiv_query_id: Optional[int] = None,
                  arxiv_query_model: Optional[ArxivQueryModel] = None,
                  created_at: Optional[datetime] = None,
                  updated_at: Optional[datetime] = None) -> None:
@@ -37,8 +39,9 @@ class PaperModel(BaseModel):
         self.abstract = abstract
         self.abstract_jp = abstract_jp
         self.pdf_link = pdf_link
-        if arxiv_quey_id is not None:
-            self.arxiv_quey_id = arxiv_quey_id
+        self.published_at = published_at
+        if arxiv_query_id is not None:
+            self.arxiv_query_id = arxiv_query_id
         if arxiv_query_model is not None:
             self.arxiv_query_model = arxiv_query_model
         self.created_at = created_at
@@ -51,6 +54,7 @@ class PaperModel(BaseModel):
              self.abstract,
              self.abstract_jp,
              self.pdf_link,
-             self.arxiv_quey_id,
+             self.published_at,
+             self.arxiv_query_id,
              self.created_at,
              self.updated_at)
