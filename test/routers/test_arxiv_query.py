@@ -16,7 +16,13 @@ class TestArxivQueryPost():
         response = app_client.post("/arxiv_query/", json={"arxiv_query": target_query})
 
         assert response.status_code == status.HTTP_200_OK
-        assert response.json() == {"message": "検索クエリの登録が完了しました"}
+        assert response.json() == {"message": "検索クエリの登録が完了しました",
+                                   "saved_query": {
+                                       "arxiv_query_id": 1,
+                                       "arxiv_query": "OCR",
+                                       "is_active": True
+                                   }
+                                   }
 
         arxiv_query_model = db_session.query(ArxivQueryModel).\
             filter(ArxivQueryModel.arxiv_query == target_query).\
