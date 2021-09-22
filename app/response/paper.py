@@ -10,6 +10,8 @@ class Paper(BaseModel):
 
         published_at (str): 論文の公開日時(YYYY/MM/DD)
 
+        paper_id (int): PaperID
+
         arxiv_query_id (int): ArxivクエリID
 
         is_stocked (bool): ストック判定フラグ
@@ -23,6 +25,7 @@ class Paper(BaseModel):
     """
 
     published_at: str
+    paper_id: int
     arxiv_query_id: int
     is_stocked: bool
     title: str
@@ -32,6 +35,7 @@ class Paper(BaseModel):
     class Config:
         schema_extra = {
             'example': {'published_at': '2021/09/23',
+                        'paper_id': 2,
                         'arxiv_query_id': 1,
                         'is_stocked': True,
                         'title': 'paper title',
@@ -62,17 +66,19 @@ class PapersGetOut(BaseModel):
             'example': {
                 'papers': [
                     {'published_at': '2021/09/23',
-                        'arxiv_query_id': 1,
-                        'is_stocked': True,
-                        'title': 'paper title 1',
-                        'abstract': 'paper abstract 1',
-                        'pdf_link': 'sample_1.pdf'},
+                     'paper_id': 2,
+                     'arxiv_query_id': 1,
+                     'is_stocked': True,
+                     'title': 'paper title 1',
+                     'abstract': 'paper abstract 1',
+                     'pdf_link': 'sample_1.pdf'},
                     {'published_at': '2021/09/23',
-                        'arxiv_query_id': 1,
-                        'is_stocked': True,
-                        'title': 'paper title 2',
-                        'abstract': 'paper abstract 2',
-                        'pdf_link': 'sample_2.pdf'}
+                     'paper_id': 3,
+                     'arxiv_query_id': 1,
+                     'is_stocked': True,
+                     'title': 'paper title 2',
+                     'abstract': 'paper abstract 2',
+                     'pdf_link': 'sample_2.pdf'}
                 ],
                 'current_page': 1,
                 'all_page_size': 1,
