@@ -8,35 +8,35 @@ class Paper(BaseModel):
 
     Attributes:
 
-        created_at (str): 登録日時(YYYY/MM/DD)
+        published_at (str): 論文の公開日時(YYYY/MM/DD)
 
         arxiv_query_id (int): ArxivクエリID
 
         is_stocked (bool): ストック判定フラグ
 
-        is_checked (bool): ストックした論文でチェック済みか判定するフラグ
-
         title (str): 論文のタイトル
 
         abstract (str): 論文の概要
 
+        pdf_link (str): padリンク
+
     """
 
-    created_at: str
+    published_at: str
     arxiv_query_id: int
     is_stocked: bool
-    is_checked: bool
     title: str
     abstract: str
+    pdf_link: str
 
     class Config:
         schema_extra = {
-            'example': {'created_at': '2021/09/23',
+            'example': {'published_at': '2021/09/23',
                         'arxiv_query_id': 1,
                         'is_stocked': True,
-                        'is_checked': False,
                         'title': 'paper title',
-                        'abstract': 'paper abstract'}
+                        'abstract': 'paper abstract',
+                        'pdf_link': 'sample.pdf'}
         }
 
 
@@ -61,18 +61,18 @@ class PapersGetOut(BaseModel):
         schema_extra = {
             'example': {
                 'papers': [
-                    {'created_at': '2021/09/23',
+                    {'published_at': '2021/09/23',
                         'arxiv_query_id': 1,
                         'is_stocked': True,
-                        'is_checked': False,
                         'title': 'paper title 1',
-                        'abstract': 'paper abstract 1'},
-                    {'created_at': '2021/09/23',
+                        'abstract': 'paper abstract 1',
+                        'pdf_link': 'sample_1.pdf'},
+                    {'published_at': '2021/09/23',
                         'arxiv_query_id': 1,
                         'is_stocked': True,
-                        'is_checked': True,
                         'title': 'paper title 2',
-                        'abstract': 'paper abstract 2'}
+                        'abstract': 'paper abstract 2',
+                        'pdf_link': 'sample_2.pdf'}
                 ],
                 'current_page': 1,
                 'all_page_size': 1,
