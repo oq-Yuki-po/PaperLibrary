@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import TEXT, Column, Integer, String
+from sqlalchemy import TEXT, Boolean, Column, Date, Integer
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.schema import ForeignKey
 
@@ -19,7 +19,8 @@ class PaperModel(BaseModel):
     abstract: str = Column(TEXT, nullable=False)
     abstract_jp: str = Column(TEXT, nullable=False)
     pdf_link: str = Column(TEXT, nullable=False)
-    published_at: str = Column(String(10), nullable=False)
+    published_at: datetime = Column(Date, nullable=False)
+    is_stocked: bool = Column(Boolean, nullable=False, default=False)
     arxiv_query_id: int = Column(Integer,
                                  ForeignKey(ArxivQueryModel.arxiv_query_id, ondelete='CASCADE'),
                                  nullable=False)
@@ -31,6 +32,7 @@ class PaperModel(BaseModel):
                  abstract_jp: str,
                  pdf_link: str,
                  published_at: str,
+                 is_stocked: bool = False,
                  arxiv_query_id: Optional[int] = None,
                  arxiv_query_model: Optional[ArxivQueryModel] = None,
                  created_at: Optional[datetime] = None,
@@ -40,6 +42,7 @@ class PaperModel(BaseModel):
         self.abstract_jp = abstract_jp
         self.pdf_link = pdf_link
         self.published_at = published_at
+        self.is_stocked = is_stocked
         if arxiv_query_id is not None:
             self.arxiv_query_id = arxiv_query_id
         if arxiv_query_model is not None:

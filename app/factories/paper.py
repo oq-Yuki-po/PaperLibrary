@@ -19,6 +19,7 @@ class PaperFactory(SQLAlchemyModelFactory):
     abstract_jp = ""
     pdf_link = Faker('url')
     published_at = "2021/09/21"
+    is_stocked = True
     arxiv_query_model = SubFactory(ArxivQueryFactory)
     created_at = func.now()
     updated_at = func.now()
