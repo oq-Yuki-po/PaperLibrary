@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
-from app.response.paper_stock import PaperStockDeleteOut, PaperStockPostOut, PaperStockPutOut
+from app.models import PaperModel, session
+from app.response.paper_stock import PaperStockPutOut
 
 router = APIRouter()
 
@@ -11,15 +12,13 @@ router = APIRouter(
 
 
 
-@router.post("/{paper_id}", summary="ストックする論文を登録", response_model=PaperStockPostOut)
-async def save_paper_stock():
-    pass
+@router.put("/{paper_id}", summary="論文のストックのステータスを更新", response_model=PaperStockPutOut)
+async def update_papers_is_stocked(paper_id):
 
+    paper_model = session.query(PaperModel).filter(PaperModel.paper_id==paper_id).first()
 
-@router.put("/{paper_id}", summary="ストックしている論文のステータスを更新", response_model=PaperStockPutOut)
-async def update_paper_stock_is_checked():
-    pass
+    paper_model.is_stocked = not paper_model.is_stocked
 
-@router.delete("/{paper_id}", summary="論文をストックから削除", response_model=PaperStockDeleteOut)
-async def delete_paper_stock():
-    pass
+    session.commit()
+
+    return PaperStockPutOut()
