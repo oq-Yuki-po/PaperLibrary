@@ -9,7 +9,11 @@ from app.models import session
 from app.models.setting import initialize_db
 from app.routers import arxiv_query_router, paper_stock_router, papers_router
 
-app = FastAPI(title="FastAPI Template", version="1.0.0")
+app = FastAPI(title="PaperLibrary", version="1.0.0")
+
+app.include_router(arxiv_query_router, prefix='/api')
+app.include_router(papers_router, prefix='/api')
+app.include_router(paper_stock_router, prefix='/api')
 
 app.include_router(arxiv_query_router)
 app.include_router(papers_router)
