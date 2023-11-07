@@ -3,12 +3,12 @@ from datetime import datetime
 
 from sqlalchemy import Column, DateTime, MetaData, create_engine
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.ext.declarative import declarative_base, declared_attr
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy.orm import declarative_base, scoped_session, sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 
 from app import app_logger
-from app.response.error import DataBaseConnectionError, InternalServerError
+from app.schemas.responses import DataBaseConnectionError, InternalServerError
 
 # Engine
 SERVER = os.getenv('POSTGRES_SERVER')
@@ -19,7 +19,6 @@ PORT = os.getenv('POSTGRES_PORT')
 
 Engine = create_engine(
     "postgresql://{}:{}@{}:{}/{}".format(USER, PASSWORD, SERVER, PORT, DB),
-    encoding="utf-8",
     echo=False
 )
 
@@ -76,6 +75,7 @@ def initialize_db() -> None:
     except Exception as e:
         app_logger.error(e)
         raise InternalServerError()
+
 
 def initialize_table() -> None:
     try:

@@ -1,5 +1,4 @@
 import traceback
-from typing import Union
 
 from fastapi import status
 from pydantic import BaseModel
@@ -75,7 +74,3 @@ class DataBaseConnectionErrorOut(BaseModel):
     stacktrace: str = traceback.format_exc()
     code: int = status.HTTP_500_INTERNAL_SERVER_ERROR
     message: str = ErrorMessage.DATABASE_CONNECTION_ERROR
-
-
-class Root500ErrorClass(BaseModel):
-    __root__: Union[InternalServerErrorOut, DataBaseErrorOut, DataBaseConnectionErrorOut]

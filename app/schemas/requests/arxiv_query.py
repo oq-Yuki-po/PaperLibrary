@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ArxivQueryPostIn(BaseModel):
@@ -13,12 +13,13 @@ class ArxivQueryPostIn(BaseModel):
                              min_length=1,
                              max_length=255)
 
-    class Config:
-        schema_extra = {
+    model_config: ConfigDict = ConfigDict(
+        json_schema_extra={
             'example': {
                 'arxiv_query': 'OCR'
             }
         }
+    )
 
 
 class ArxivQueryPutIn(BaseModel):
@@ -30,12 +31,14 @@ class ArxivQueryPutIn(BaseModel):
     """
     arxiv_query_id: int = Field(...)
 
-    class Config:
-        schema_extra = {
+    model_config: ConfigDict = ConfigDict(
+        json_schema_extra={
             'example': {
                 'arxiv_query_id': 10
             }
         }
+    )
+
 
 class ArxivQueryDeleteIn(BaseModel):
     """/arxiv_query delete リクエストクラス
@@ -46,9 +49,10 @@ class ArxivQueryDeleteIn(BaseModel):
     """
     arxiv_query_id: int = Field(...)
 
-    class Config:
-        schema_extra = {
+    model_config: ConfigDict = ConfigDict(
+        json_schema_extra={
             'example': {
                 'arxiv_query_id': 10
             }
         }
+    )

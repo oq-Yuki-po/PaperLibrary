@@ -5,7 +5,7 @@ from fastapi import status
 
 from app.factories import ArxivQueryFactory, PaperFactory
 from app.models import ArxivQueryModel, PaperModel
-from app.response.arxiv_query import ArxivQuery, ArxivQueryGetOut
+from app.schemas.responses import ArxivQuery, ArxivQueryGetOut
 
 
 class TestArxivQueryPost():

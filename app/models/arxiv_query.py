@@ -12,9 +12,9 @@ class ArxivQueryModel(BaseModel):
     """
     __tablename__ = 'arxiv_queries'
 
-    arxiv_query_id: int = Column(Integer, primary_key=True)
-    arxiv_query: str = Column(String(255), nullable=False, unique=True)
-    is_active: bool = Column(Boolean, nullable=False, default=True)
+    arxiv_query_id = Column(Integer, primary_key=True)
+    arxiv_query = Column(String(255), nullable=False, unique=True)
+    is_active = Column(Boolean, nullable=False, default=True)
 
     def __init__(self,
                  arxiv_query: str,

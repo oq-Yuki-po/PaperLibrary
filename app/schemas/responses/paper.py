@@ -1,6 +1,6 @@
-from typing import List, Optional
+from typing import List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class Paper(BaseModel):
@@ -32,8 +32,8 @@ class Paper(BaseModel):
     abstract: str
     pdf_link: str
 
-    class Config:
-        schema_extra = {
+    model_config: ConfigDict = ConfigDict(
+        json_schema_extra={
             'example': {'published_at': '2021/09/23',
                         'paper_id': 2,
                         'arxiv_query_id': 1,
@@ -42,6 +42,7 @@ class Paper(BaseModel):
                         'abstract': 'paper abstract',
                         'pdf_link': 'sample.pdf'}
         }
+    )
 
 
 class PapersGetOut(BaseModel):
@@ -61,8 +62,8 @@ class PapersGetOut(BaseModel):
     current_page: int
     all_page_size: int
 
-    class Config:
-        schema_extra = {
+    model_config: ConfigDict = ConfigDict(
+        json_schema_extra={
             'example': {
                 'papers': [
                     {'published_at': '2021/09/23',
@@ -84,3 +85,4 @@ class PapersGetOut(BaseModel):
                 'all_page_size': 1,
             }
         }
+    )

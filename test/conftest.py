@@ -25,11 +25,13 @@ def setup_test_env(request):
 
     schema_name: str = os.environ.get('DB_SCHEMA', 'test')
 
-    if not Engine.dialect.has_schema(Engine, schema_name):
-        Engine.execute(CreateSchema(schema_name))
+    with Engine.begin() as conn:
+        if not Engine.dialect.has_schema(conn, schema_name):
+            conn.execute(CreateSchema(schema_name))
 
     def drop_schema():
-        Engine.execute(DropSchema(schema_name))
+        with Engine.begin() as conn:
+            conn.execute(DropSchema(schema_name))
 
     request.addfinalizer(drop_schema)
 

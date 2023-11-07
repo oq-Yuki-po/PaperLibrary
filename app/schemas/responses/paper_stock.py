@@ -1,6 +1,4 @@
-from typing import List
-
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class PaperStockPostOut(BaseModel):
@@ -12,12 +10,13 @@ class PaperStockPostOut(BaseModel):
     """
     message: str = Field('論文のストックが完了しました', title='message')
 
-    class Config:
-        schema_extra = {
+    model_config: ConfigDict = ConfigDict(
+        json_schema_extra={
             'example': {
                 'message': '論文のストックが完了しました'
             }
         }
+    )
 
 
 class PaperStockPutOut(BaseModel):
@@ -29,12 +28,13 @@ class PaperStockPutOut(BaseModel):
     """
     message: str = Field('ストックしている論文のステータスを更新しました', title='message')
 
-    class Config:
-        schema_extra = {
+    model_config: ConfigDict = ConfigDict(
+        json_schema_extra={
             'example': {
                 'message': 'ストックしている論文のステータスを更新しました'
             }
         }
+    )
 
 
 class PaperStockDeleteOut(BaseModel):
@@ -46,9 +46,10 @@ class PaperStockDeleteOut(BaseModel):
     """
     message: str = Field('論文をストックから削除しました', title='message')
 
-    class Config:
-        schema_extra = {
+    model_config: ConfigDict = ConfigDict(
+        json_schema_extra={
             'example': {
                 'message': '論文をストックから削除しました'
             }
         }
+    )

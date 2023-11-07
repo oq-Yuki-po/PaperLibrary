@@ -3,9 +3,16 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.sql import exists
 
 from app.models import ArxivQueryModel, session
-from app.request.arxiv_query import ArxivQueryDeleteIn, ArxivQueryPostIn, ArxivQueryPutIn
-from app.response.arxiv_query import (ArxivQuery, ArxivQueryDeleteOut, ArxivQueryGetOut, ArxivQueryPostConflict,
-                                      ArxivQueryPostOut, ArxivQueryPutNone, ArxivQueryPutOut)
+from app.schemas.requests import ArxivQueryDeleteIn, ArxivQueryPostIn, ArxivQueryPutIn
+from app.schemas.responses import (
+    ArxivQuery,
+    ArxivQueryDeleteOut,
+    ArxivQueryGetOut,
+    ArxivQueryPostConflict,
+    ArxivQueryPostOut,
+    ArxivQueryPutNone,
+    ArxivQueryPutOut,
+)
 
 router = APIRouter()
 

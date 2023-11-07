@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.models import PaperModel, session
-from app.response.paper_stock import PaperStockPutOut
+from app.schemas.responses import PaperStockPutOut
 
 router = APIRouter()
 
@@ -11,11 +11,10 @@ router = APIRouter(
 )
 
 
-
 @router.put("/{paper_id}", summary="論文のストックのステータスを更新", response_model=PaperStockPutOut)
 async def update_papers_is_stocked(paper_id):
 
-    paper_model = session.query(PaperModel).filter(PaperModel.paper_id==paper_id).first()
+    paper_model = session.query(PaperModel).filter(PaperModel.paper_id == paper_id).first()
 
     paper_model.is_stocked = not paper_model.is_stocked
 

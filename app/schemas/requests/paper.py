@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class PapersGetIn(BaseModel):
@@ -25,8 +25,8 @@ class PapersGetIn(BaseModel):
     is_stocked: Optional[bool] = Field(False)
     page: int = Field(1)
 
-    class Config:
-        schema_extra = {
+    model_config: ConfigDict = ConfigDict(
+        json_schema_extra={
             'example': {
                 'published_at': ['2021/09/20', '2021/09/24'],
                 'arxiv_query_id': 1,
@@ -34,3 +34,4 @@ class PapersGetIn(BaseModel):
                 'page': 1
             }
         }
+    )

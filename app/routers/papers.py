@@ -2,8 +2,8 @@ from fastapi import APIRouter
 from sqlalchemy import desc, func, over
 
 from app.models import ArxivQueryModel, PaperModel, session
-from app.request.paper import PapersGetIn
-from app.response.paper import Paper, PapersGetOut
+from app.schemas.requests import PapersGetIn
+from app.schemas.responses import PapersGetOut
 
 router = APIRouter()
 

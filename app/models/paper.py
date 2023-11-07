@@ -14,17 +14,17 @@ class PaperModel(BaseModel):
     """
     __tablename__ = 'papers'
 
-    paper_id: int = Column(Integer, primary_key=True)
-    title: str = Column(TEXT, nullable=False)
-    abstract: str = Column(TEXT, nullable=False)
-    abstract_jp: str = Column(TEXT, nullable=False)
-    pdf_link: str = Column(TEXT, nullable=False)
-    published_at: datetime = Column(Date, nullable=False)
-    is_stocked: bool = Column(Boolean, nullable=False, default=False)
-    arxiv_query_id: int = Column(Integer,
-                                 ForeignKey(ArxivQueryModel.arxiv_query_id, ondelete='CASCADE'),
-                                 nullable=False)
-    arxiv_query_model: ArxivQueryModel = relationship(ArxivQueryModel, backref=backref('papers', passive_deletes=True))
+    paper_id = Column(Integer, primary_key=True)
+    title = Column(TEXT, nullable=False)
+    abstract = Column(TEXT, nullable=False)
+    abstract_jp = Column(TEXT, nullable=False)
+    pdf_link = Column(TEXT, nullable=False)
+    published_at = Column(Date, nullable=False)
+    is_stocked = Column(Boolean, nullable=False, default=False)
+    arxiv_query_id = Column(Integer,
+                            ForeignKey(ArxivQueryModel.arxiv_query_id, ondelete='CASCADE'),
+                            nullable=False)
+    arxiv_query_model = relationship(ArxivQueryModel, backref=backref('papers', passive_deletes=True))
 
     def __init__(self,
                  title: str,
