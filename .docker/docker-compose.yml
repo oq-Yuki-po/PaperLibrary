@@ -8,7 +8,19 @@ services:
       context: ..
       dockerfile: .docker/Dockerfile
 
-    command: ["gunicorn", "-w", "2", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000", "main:app", "--log-config", "logging.conf"]
+    command:
+      [
+        "gunicorn",
+        "-w",
+        "2",
+        "-k",
+        "uvicorn.workers.UvicornWorker",
+        "-b",
+        "0.0.0.0:8000",
+        "main:app",
+        "--log-config",
+        "logging.conf"
+      ]
     env_file: app.env
 
     volumes:
@@ -19,7 +31,7 @@ services:
     image: postgres:latest
     restart: unless-stopped
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - paper-library-data:/var/lib/postgresql/data
     env_file: app.env
 
   web:
@@ -36,4 +48,4 @@ services:
       - ./web/build:/usr/share/nginx/build
 
 volumes:
-  postgres-data:
+  paper-library-data:

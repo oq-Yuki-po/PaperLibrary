@@ -1,32 +1,41 @@
 [tool.poetry]
-name = "fastapi-template"
-version = "0.1.0"
+name = "Paper Library"
+version = "1.0.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-fastapi = "^0.68.1"
-uvicorn = "^0.15.0"
-alembic = "^1.6.5"
-psycopg2-binary = "^2.9.1"
-SQLAlchemy = "^1.4.23"
-factory-boy = "^3.2.0"
-gunicorn = "^20.1.0"
-requests = "^2.26.0"
-cryptography = "^3.4.8"
-fastapi-versioning = "^0.10.0"
-SQLAlchemy-Utils = "^0.37.8"
-schedule = "^1.1.0"
-arxiv = "^1.4.2"
-pytest-mock = "^3.6.1"
+python = "^3.11"
+SQLAlchemy = "^2.0.23"
+sqlalchemy-utils = "^0.41.1"
+arxiv = "^2.0.0"
+fastapi = "^0.104.1"
+alembic = "^1.12.1"
+uvicorn = "^0.24.0.post1"
+gunicorn = "^21.2.0"
+factory-boy = "^3.3.0"
+requests = "^2.31.0"
+schedule = "^1.2.1"
+psycopg2-binary = "^2.9.9"
 
-[tool.poetry.dev-dependencies]
-pytest = "^6.2.4"
-isort = "^5.9.3"
-autopep8 = "^1.5.7"
-pytest-mock = "^3.6.1"
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+isort = "^5.12.0"
+autopep8 = "^2.0.4"
+pytest-mock = "^3.12.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+dev = "gunicorn -w 2 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000 --log-config logging.conf --reload"
+test = "pytest -v"
+db_upgrade_head = "alembic upgrade head"
+db_upgrade = "alembic upgrade"
+db_downgrade_base = "alembic downgrade base"
+db_downgrade = "alembic downgrade"
+db_migrate = "alembic revision --autogenerate -m"
+check_access = "tail -f /var/log/gunicorn/access.log"
+check_error = "tail -f /var/log/gunicorn/error.log"
+check_app = "tail -f /var/log/gunicorn/app.log"

@@ -1,0 +1,16 @@
+_task()
+{
+    local cur
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    if [[ $COMP_CWORD -eq 1 ]]; then
+        local commands=("dev" "test")
+        commands+=("db_migrate" "db_upgrade" "db_downgrade")
+        commands+=("db_upgrade_head" "db_downgrade_base")
+        commands+=("check_access" "check_error" "check_app")
+        COMPREPLY=($(compgen -W "${commands[*]}" -- ${cur}))
+    fi
+    return 0
+}
+
+complete -F _task task
