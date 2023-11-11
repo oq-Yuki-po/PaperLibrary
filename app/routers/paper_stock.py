@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from app.models import PaperModel, session
+from app.schemas.errors import InternalServerErrorOut
 from app.schemas.responses import PaperStockPutOut
 
 router = APIRouter()
@@ -11,7 +12,10 @@ router = APIRouter(
 )
 
 
-@router.put("/{paper_id}", summary="論文のストックのステータスを更新", response_model=PaperStockPutOut)
+@router.put("/{paper_id}",
+            summary="論文のストックのステータスを更新",
+            response_model=PaperStockPutOut,
+            responses={500: {"model": InternalServerErrorOut}})
 async def update_papers_is_stocked(paper_id):
 
     paper_model = session.query(PaperModel).filter(PaperModel.paper_id == paper_id).first()
