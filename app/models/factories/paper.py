@@ -4,8 +4,8 @@ from factory.alchemy import SQLAlchemyModelFactory
 from factory.declarations import SubFactory
 from sqlalchemy import func
 
-from app.factories import ArxivQueryFactory
 from app.models import PaperModel, session
+from app.models.factories import ArxivQueryFactory
 
 
 class PaperFactory(SQLAlchemyModelFactory):

@@ -3,8 +3,8 @@ import json
 import pytest
 from fastapi import status
 
-from app.factories import ArxivQueryFactory, PaperFactory
 from app.models import ArxivQueryModel, PaperModel
+from app.models.factories import ArxivQueryFactory, PaperFactory
 from app.schemas.responses import ArxivQuery, ArxivQueryGetOut
 
 
