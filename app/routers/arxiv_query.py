@@ -2,7 +2,9 @@ from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.sql import exists
 
+from app.errors import DuplicateArxivQuery
 from app.models import ArxivQueryModel, session
+from app.schemas.errors import DuplicateArxivQueryOut
 from app.schemas.requests import ArxivQueryDeleteIn, ArxivQueryPostIn, ArxivQueryPutIn
 from app.schemas.responses import (
     ArxivQuery,
@@ -37,21 +39,17 @@ async def fetch_all_arxiv_queries():
              summary="論文の検索クエリを登録",
              response_model=ArxivQueryPostOut,
              responses={status.HTTP_409_CONFLICT: {'description': '登録しようとしたArxivクエリが存在する場合',
-                                                   'model': ArxivQueryPostConflict}})
+                                                   'model': DuplicateArxivQueryOut}})
 async def save_arxiv_query(params: ArxivQueryPostIn):
 
-    # 重複チェック
-    if session.query(exists().where(ArxivQueryModel.arxiv_query == params.arxiv_query)).scalar():
+    arxiv_model = ArxivQueryModel(arxiv_query=params.arxiv_query)
 
-        return JSONResponse(status_code=status.HTTP_409_CONFLICT, content={"message": "既に登録されています"})
-    else:
-        # 登録処理
-        arxiv_query_model = ArxivQueryModel(arxiv_query=params.arxiv_query)
-        session.add(arxiv_query_model)
-        session.commit()
-    return ArxivQueryPostOut(saved_query=ArxivQuery(arxiv_query_id=arxiv_query_model.arxiv_query_id,
-                                                    arxiv_query=arxiv_query_model.arxiv_query,
-                                                    is_active=arxiv_query_model.is_active))
+    if arxiv_model.save() is False:
+        raise DuplicateArxivQuery()
+
+    return ArxivQueryPostOut(saved_query=ArxivQuery(arxiv_query_id=arxiv_model.arxiv_query_id,
+                                                    arxiv_query=arxiv_model.arxiv_query,
+                                                    is_active=arxiv_model.is_active))
 
 
 @router.put("/",

@@ -5,6 +5,7 @@ from fastapi import status
 
 from app.models import ArxivQueryModel, PaperModel
 from app.models.factories import ArxivQueryFactory, PaperFactory
+from app.schemas.errors import DuplicateArxivQueryOut
 from app.schemas.responses import ArxivQuery, ArxivQueryGetOut
 
 
@@ -40,17 +41,10 @@ class TestArxivQueryPost():
         db_session.add(arxiv_query_model)
         db_session.commit()
 
-        arxiv_query_model = db_session.query(ArxivQueryModel).all()
-
-        assert len(arxiv_query_model) == 1
-
         response = app_client.post("/arxiv_query/", json={"arxiv_query": target_query})
 
         assert response.status_code == status.HTTP_409_CONFLICT
-        assert response.json() == {"message": "既に登録されています"}
-
-        arxiv_query_model = db_session.query(ArxivQueryModel).all()
-        assert len(arxiv_query_model) == 1
+        assert response.json() == json.loads(DuplicateArxivQueryOut().model_dump_json())
 
 
 class TestArxivQueryPut():

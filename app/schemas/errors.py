@@ -17,4 +17,3 @@ class DuplicateArxivQueryOut(BaseModel):
     DuplicateArxivQueryOut
     """
     detail: str = Field(default=ErrorMessage.DUPLICATE_ARXIV_QUERY)
-    status_code: int = Field(default=status.HTTP_409_CONFLICT)
